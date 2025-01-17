@@ -1,0 +1,37 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.pyc
+
+# Django
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+*.log
+media/
+staticfiles/
+
+# VS Code
+.vscode/
+
+# Virtual Environment
+venv/
+env/
+*.env
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# JetBrains IDEs (e.g., PyCharm, IntelliJ)
+.idea/
+
+# Vercel deployment
+.vercel/
