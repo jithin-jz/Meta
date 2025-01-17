@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta HR Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-green-50 to-blue-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-500">META</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'register' %}" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-2 rounded-lg hover:from-green-600 hover:to-blue-600 transition-all">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto py-6 px-4">
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Hero Section with Login -->
+        <div class="grid md:grid-cols-2 gap-8 items-center mt-8">
+            <!-- Left Column - Welcome Text -->
+            <div class="text-center md:text-left">
+                <h1 class="text-4xl font-bold mb-4">
+                    <span class="block text-gray-800">Welcome to</span>
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">Meta Portal</span>
+                </h1>
+                <p class="text-gray-600 text-lg mb-6">
+                    Streamline your HR operations with our comprehensive management system. Track attendance, manage leave requests, and stay connected with your team.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div class="bg-white p-4 rounded-lg shadow-lg text-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1256/1256650.png" alt="Employee Icon" class="w-16 h-16 mx-auto">
+                        <h3 class="text-lg font-semibold mt-2">Employee Management</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-lg text-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Salary Icon" class="w-16 h-16 mx-auto">
+                        <h3 class="text-lg font-semibold mt-2">Payroll System</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Login Form -->
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold text-center mb-6">Login to Your Account</h2>
+                <form method="POST" action="#" class="space-y-6">
+                    {% csrf_token %}
+                    <div>
+                        <label for="username" class="block text-gray-700 mb-2">Username</label>
+                        <input type="text" id="username" name="username" value="user"
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                               required>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" name="password" value="1234"
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                               required>
+                    </div>
+                    <button type="submit" 
+                            class="w-full py-2 px-4 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg hover:from-green-600 hover:to-blue-600 transition-all">
+                        Sign In
+                    </button>
+                    <p class="text-center text-gray-600">
+                        New user? <a href="{% url 'register' %}" class="text-blue-500 hover:text-blue-600">Create account</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/10722/10722591.png" alt="Leave Icon" class="w-16 h-16 mx-auto">
+                <h3 class="text-xl font-semibold mt-4">Leave Management</h3>
+                <p class="text-gray-600 mt-2">Efficiently manage employee leave requests and tracking</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/236/236832.png" alt="Profile Icon" class="w-16 h-16 mx-auto">
+                <h3 class="text-xl font-semibold mt-4">Employee Profiles</h3>
+                <p class="text-gray-600 mt-2">Complete employee information management system</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Reports Icon" class="w-16 h-16 mx-auto">
+                <h3 class="text-xl font-semibold mt-4">Performance Tracking</h3>
+                <p class="text-gray-600 mt-2">Monitor and evaluate employee performance</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+</body>
+</html>

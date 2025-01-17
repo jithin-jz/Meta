@@ -1,0 +1,133 @@
+{% load static %}
+{% include 'base.html' %}
+{% include 'navbar.html' %}
+<div class="container mx-auto py-6 px-4">
+  <!-- Welcome Banner -->
+  <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white p-8 rounded-lg shadow-lg text-center">
+    <h1 class="text-3xl font-semibold">WELCOME BACK, {{ user.username|capfirst|upper }}!</h1>
+    <p class="mt-2">We're glad to have you back at Meta</p>
+    <p class="mt-2">Last login: {{ last_login_time|date:"F j, Y" }} at {{ last_login_time|time:"H:i" }}</p>
+    <div class="mt-4">
+      <a href="{% url 'attendance_view' %}" class="bg-white text-blue-500 py-2 px-4 rounded shadow hover:bg-gray-100">Check In</a>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+    <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
+      <div class="flex flex-col items-center">
+          <img src="https://cdn-icons-png.flaticon.com/512/236/236832.png" alt="Default Profile" class="rounded-full w-20 h-20 border-4 border-white object-cover">
+        <h4 class="text-xl mt-2">{{ user.username|capfirst }}</h4>
+        <p>{{ profile.position }}</p>
+      </div>
+    </div>
+
+    <div class="bg-green-500 text-white p-6 rounded-lg shadow-lg text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/1256/1256650.png" alt="Employee Icon" class="w-16 h-16 mx-auto">
+      <h5 class="text-lg mt-4">Employees</h5>
+      <h3 class="text-2xl">{{ total_employees }}</h3>
+    </div>
+
+    <div class="bg-blue-400 text-white p-6 rounded-lg shadow-lg text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/10722/10722591.png" alt="Leave Icon" class="w-16 h-16 mx-auto">
+      <h5 class="text-lg mt-4">Leave Balance</h5>
+      <h3 class="text-2xl">{{ remaining_leave }} Days</h3>
+    </div>
+
+    <div class="bg-gray-600 text-white p-6 rounded-lg shadow-lg text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Salary Icon" class="w-16 h-16 mx-auto">
+      <h5 class="text-lg mt-4">Salary</h5>
+      <h3 class="text-2xl">&#8377;{{ profile.salary|floatformat:-1 }}</h3>
+    </div>
+  </div>
+
+  <!-- Events and To-Do -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+    <!-- Upcoming Events -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h5 class="text-xl font-semibold text-blue-500">Upcoming Events</h5>
+      <ul class="mt-4 space-y-2">
+        {% for event in upcoming_events %}
+          <li class="p-4 bg-gray-100 rounded flex justify-between items-center">
+            <span>
+              <strong>{{ event.name }}</strong><br>
+              <small class="text-gray-500">{{ event.date }}</small>
+            </span>
+          </li>
+        {% empty %}
+          <li class="p-4 bg-gray-100 rounded">No upcoming events.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- To-Do List -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h5 class="text-xl font-semibold text-blue-500">To-Do List</h5>
+      <form method="POST" action="" class="mt-4 flex">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="New Task" class="flex-grow border rounded p-2" required>
+        <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Add</button>
+      </form>
+      <ul class="mt-4 space-y-2">
+        {% for task in tasks %}
+          <li class="p-4 bg-gray-100 rounded flex justify-between items-center">
+            <div>
+              <input type="checkbox" name="task_{{ task.id }}" {% if task.completed %}checked{% endif %}>
+              {{ task.name }}
+            </div>
+            <form method="POST" action="{% url 'delete_task' task.id %}">
+              {% csrf_token %}
+              <button type="submit" class="text-red-500">Delete</button>
+            </form>
+          </li>
+        {% empty %}
+          <li class="p-4 bg-gray-100 rounded">No tasks available.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Calendar and Employee Chart -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+    <!-- Calendar -->
+    <div class="bg-white p-6 rounded-lg shadow-lg h-[500px]">
+      <div class="w-full h-full">
+        <iframe 
+          src="https://calendar.google.com/calendar/embed?src=your-calendar-id&ctz=Your_Time_Zone" 
+          class="w-full h-full border-0" 
+          frameborder="0" 
+          scrolling="no">
+        </iframe>
+      </div>
+    </div>
+    <!-- Chart -->
+    <div class="bg-white p-6 rounded-lg shadow-lg h-[500px]">
+      <div class="w-full h-full flex justify-center items-center">
+        <img 
+          src="data:image/png;base64,{{ chart_data }}" 
+          alt="Employee Distribution Chart" 
+          class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+  </div>
+
+  <!-- Assigned Projects -->
+  <div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
+    <h5 class="text-xl font-semibold text-blue-500">Assigned Projects</h5>
+    {% if projects %}
+      <ul class="mt-4 space-y-2">
+        {% for project in projects %}
+          <li class="p-4 bg-gray-100 rounded">
+            <div class="font-semibold">Project: {{ project.project_name }}</div>
+            <div>Name: {{ project.user.username }}</div>
+            <small class="text-gray-500">Tasks: {{ project.project_assign }}</small>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-gray-500">No projects assigned yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% include 'footer.html' %}

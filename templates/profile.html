@@ -1,0 +1,145 @@
+{% load static %}
+{% include 'base.html' %}
+{% include 'navbar.html' %}
+
+<div class="container mx-auto px-4 py-4">
+  <!-- Profile Header -->
+  <div class="mb-4">
+    <div class="w-full">
+      <div class="bg-blue-600 text-white rounded-lg">
+        <div class="p-6 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold mb-0">{{ user_profile.user.username|capfirst }}</h1>
+            <p class="mb-0">{{ user_profile.get_position_display }}</p>
+          </div>
+          <button class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+            <i class="fas fa-edit mr-2"></i>Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Details Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Personal Info Card -->
+    <div>
+      <div class="bg-white rounded-lg shadow h-full">
+        <div class="bg-gray-50 px-6 py-4 rounded-t-lg">
+          <h5 class="font-bold mb-0"><i class="fas fa-user mr-2"></i>Personal Information</h5>
+        </div>
+        <div class="p-6">
+          <div class="mb-4">
+            <label class="text-gray-600 text-sm">Position</label>
+            <p class="text-gray-900 font-semibold">{{ user_profile.get_position_display }}</p>
+          </div>
+          <div class="mb-4">
+            <label class="text-gray-600 text-sm">Location</label>
+            <p class="text-gray-900 font-semibold">{{ user_profile.place }}</p>
+          </div>
+          <div class="mb-4">
+            <label class="text-gray-600 text-sm">Email</label>
+            <p class="text-gray-900 font-semibold">{{ user_profile.user.email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Work Info Card -->
+    <div>
+      <div class="bg-white rounded-lg shadow h-full">
+        <div class="bg-gray-50 px-6 py-4 rounded-t-lg">
+          <h5 class="font-bold mb-0"><i class="fas fa-briefcase mr-2"></i>Work Information</h5>
+        </div>
+        <div class="p-6">
+          <div class="mb-4">
+            <label class="text-gray-600 text-sm">Salary</label>
+            <p class="text-gray-900 font-semibold">₹{{ user_profile.salary|floatformat:-1 }}</p>
+          </div>
+          <div class="mb-4">
+            <label class="text-gray-600 text-sm">Last Login</label>
+            <p class="text-gray-900 font-semibold">{{ user_profile.last_login_time|date:"F j, Y" }} at {{ user_profile.last_login_time|time:"H:i" }}</p>
+          </div>
+          <div class="mb-4">
+            <label class="text-gray-600 text-sm">Employee ID</label>
+            <p class="text-gray-900 font-semibold">{{ employee_id }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 hidden" id="editProfileModal" aria-labelledby="editProfileModalLabel">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-white rounded-lg w-full max-w-4xl">
+        <div class="flex items-center justify-between p-6 border-b">
+          <h5 class="text-xl font-bold" id="editProfileModalLabel">Edit Profile</h5>
+          <button type="button" class="text-gray-400 hover:text-gray-500" data-bs-dismiss="modal">
+            <span class="sr-only">Close</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="p-6">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Name Field -->
+              <div>
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-gray-700">Name</label>
+                  <input type="text" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" value="{{ user_profile.user.username }}">
+                  {% if form.name.errors %}
+                    <p class="mt-2 text-sm text-red-600">{{ form.name.errors }}</p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Email Field -->
+              <div>
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-gray-700">Email</label>
+                  <input type="email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" value="{{ user_profile.user.email }}">
+                  {% if form.email.errors %}
+                    <p class="mt-2 text-sm text-red-600">{{ form.email.errors }}</p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Other Fields -->
+              {% for field in form %}
+                {% if field.name != "name" and field.name != "email" %}
+                  <div>
+                    <div class="mb-4">
+                      <label class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                      {{ field }}
+                      {% if field.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ field.errors }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="flex justify-end mt-6 space-x-2">
+              <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mt-6">
+    <a href="{% url 'home' %}" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+      <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+    </a>
+  </div>
+</div>
+{% include 'footer.html' %}
+
+<!-- Keep Bootstrap JS for modal functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

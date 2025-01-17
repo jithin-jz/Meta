@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50">
+    <div class="min-h-screen p-4 mt-10">
+        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6">
+            <!-- Header -->
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-semibold text-gray-800">Sign Up</h1>
+                {% if messages %}
+                    <div class="mt-3 text-sm text-blue-600">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Form -->
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Left Column -->
+                    <div>
+                        <!-- Personal Info -->
+                        <div class="space-y-4">
+                            <div>
+                                <label for="username" class="block text-sm text-gray-600">Username</label>
+                                <input 
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    required
+                                    class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md"
+                                >
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm text-gray-600">Email</label>
+                                <input 
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md"
+                                >
+                            </div>
+                            <div>
+                                <label for="password" class="block text-sm text-gray-600">Password</label>
+                                <input 
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md"
+                                >
+                            </div>
+                            <div>
+                                <label for="confirm_password" class="block text-sm text-gray-600">Confirm Password</label>
+                                <input 
+                                    type="password"
+                                    id="confirm_password"
+                                    name="confirm_password"
+                                    required
+                                    class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="position" class="block text-sm text-gray-600">Position</label>
+                                <select 
+                                    id="position"
+                                    name="position"
+                                    required
+                                    class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md"
+                                >
+                                    <option value="" disabled selected>Select position</option>
+                                    <option value="developer">Developer</option>
+                                    <option value="uiux">UI/UX Designer</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="analyst">Analyst</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="place" class="block text-sm text-gray-600">Location</label>
+                                <input 
+                                    type="text"
+                                    id="place"
+                                    name="place"
+                                    required
+                                    class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md"
+                                >
+                            </div>
+                            <div class="mt-4">
+                                <button type="submit" class="w-full aspect-video bg-gray-50 rounded-md overflow-hidden">
+                                    <img 
+                                        src="https://cdn.dribbble.com/users/8925243/screenshots/17661103/40_4x.png"
+                                        alt="Profile Picture"
+                                        class="w-full h-full object-cover"
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button 
+                        type="submit"
+                        class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
+                    >
+                        Create Account
+                    </button>
+                </div>
+            </form>
+
+            <!-- Login Link -->
+            <div class="text-center mt-4 text-sm text-gray-500">
+                Already have an account? 
+                <a href="{% url 'login' %}" class="text-black hover:underline">
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
