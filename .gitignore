@@ -23,6 +23,9 @@ staticfiles/
 venv/
 env/
 
+# Environment variables
+.env
+.env.*
 
 # macOS
 .DS_Store
