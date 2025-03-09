@@ -89,7 +89,7 @@ The project is configured for Vercel deployment with `vercel.json` configuration
 
 ## License
 
-This project is proprietary and confidential.
+This project is open source and available under the MIT License.
 
 ## Support
 
